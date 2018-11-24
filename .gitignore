@@ -11,6 +11,9 @@
 *.gch
 *.pch
 
+# Compile commands files
+compile_commands.json
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
