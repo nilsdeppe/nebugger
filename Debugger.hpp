@@ -9,7 +9,10 @@
 
 #include <string>
 #include <sys/types.h>
+#include <unordered_map>
 #include <utility>
+
+#include "Breakpoint.hpp"
 
 /// Nils debugger (nebugger) namespace
 namespace nebugger {}
@@ -25,10 +28,12 @@ class Debugger {
   void run();
 
  private:
-  void handle_command(const std::string& line);
   void continue_execution();
+  void handle_command(const std::string& line);
+  void set_breakpoint_at_address(std::intptr_t address);
 
   std::string program_name_;
   pid_t pid_;
+  std::unordered_map<std::intptr_t, Breakpoint> breakpoints_;
 };
 }  // namespace nebugger

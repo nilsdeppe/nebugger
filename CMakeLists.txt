@@ -20,7 +20,11 @@ include_directories(${CMAKE_SOURCE_DIR})
 # Define debugger library sources, including linenoise
 set(LIBRARY DEBUGGER_LIB)
 
+# Add lots of warnings
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -Wpedantic")
+
 set(LIBRARY_SOURCES
+  Breakpoint.cpp
   Debugger.cpp
   Linenoise/linenoise.c
   )

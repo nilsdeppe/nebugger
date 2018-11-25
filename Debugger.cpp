@@ -56,6 +56,12 @@ void Debugger::run() {
   }
 }
 
+void Debugger::set_breakpoint_at_address(const std::intptr_t address) {
+  Breakpoint bp{pid_, address};
+  breakpoints_.insert({address, std::move(bp.enable())});
+  std::cout << "Set breakpoint at address 0x" << std::hex << address << "\n";
+}
+
 void Debugger::handle_command(const std::string& line) {
   const auto args = detail::split(line, ' ');
   const auto command = args[0];
@@ -63,6 +69,10 @@ void Debugger::handle_command(const std::string& line) {
   // We not just check that command == "continue" or 'c'?
   if (command == "continue" or command == "c") {
     continue_execution();
+  } else if (command == "b" or command == "break") {
+    // requires the address by written as
+    std::string address{args[1], 2};
+    set_breakpoint_at_address(std::stol(address, 0, 16));
   } else {
     std::cerr << "Unknown command '" << command << "'.\n";
     return;
