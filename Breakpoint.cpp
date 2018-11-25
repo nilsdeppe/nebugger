@@ -18,7 +18,7 @@ Breakpoint& Breakpoint::enable() {
   // Read/PEEK data at the address from the process
   const long data_at_address = ptrace(PTRACE_PEEKDATA, pid_, address_, nullptr);
   if (data_at_address == -1) {
-    std::cerr << "Failed to set breakpoint at address '" << address_
+    std::cerr << "Failed to set breakpoint at address '" << std::hex << address_
               << "' during reading of address.\n";
     return *this;
   }
@@ -41,7 +41,7 @@ Breakpoint& Breakpoint::enable() {
   const uint64_t data_with_int3 = ((data_at_address & ~0xff) | int3);
   // Inject the new instruction back into the process
   if (ptrace(PTRACE_POKEDATA, pid_, address_, data_with_int3) == -1) {
-    std::cerr << "Failed to set breakpoint at address '" << address_
+    std::cerr << "Failed to set breakpoint at address '" << std::hex << address_
               << "' during writing of breakpoint to address.\n";
     return *this;
   }
@@ -53,16 +53,16 @@ Breakpoint& Breakpoint::enable() {
 Breakpoint& Breakpoint::disable() {
   const long data_at_address = ptrace(PTRACE_PEEKDATA, pid_, address_, nullptr);
   if (data_at_address == -1) {
-    std::cerr << "Failed to disable breakpoint at address '" << address_
-              << "' during reading of address.\n";
+    std::cerr << "Failed to disable breakpoint at address '" << std::hex
+              << address_ << "' during reading of address.\n";
     return *this;
   }
   const uint64_t restored_instructions =
       ((data_at_address & ~0xff) | saved_instruction_);
   // Inject the new instruction back into the process
   if (ptrace(PTRACE_POKEDATA, pid_, address_, restored_instructions) == -1) {
-    std::cerr << "Failed to disable breakpoint at address '" << address_
-              << "' during writing of instructions to address.\n";
+    std::cerr << "Failed to disable breakpoint at address '" << std::hex
+              << address_ << "' during writing of instructions to address.\n";
     return *this;
   }
 

@@ -27,6 +27,7 @@ set(LIBRARY_SOURCES
   Breakpoint.cpp
   Debugger.cpp
   Linenoise/linenoise.c
+  Registers.cpp
   )
 
 add_library(
